@@ -139,9 +139,81 @@ export const Mutation = {
             author: new ObjectId(user.id)
         })
         return {
-            _id: id,
+            _id: content,
             content: comment,
-            author: new ObjectId(id)
+            author: new ObjectId(user.id)
         };
+    },
+    deletePost: async (_: unknown, args: { postId: string }, ctx: Context): Promise<string> => {
+        const token = ctx.token
+        const { postId } = args;
+        if (!token) throw new Error("Acceso denegado")
+        const user: User = (await verifyJWT(
+            token,
+            Deno.env.get("JWT_SECRET")!
+        )) as User;
+        if (!user) throw new Error("Token incorrecto")
+        const post = await postCollection.deleteOne({
+            _id: new ObjectId(postId),
+            author: new ObjectId(user.id)
+        })
+        console.log(user.id);
+        if (!post) throw new Error("No existe ese post")
+        return "Eliminado";
+    },
+    deleteComment: async (_: unknown, args: { postId: string, commentId: string }, ctx: Context): Promise<string> => {
+        const token = ctx.token
+        const { postId, commentId } = args;
+        if (!token) throw new Error("Acceso denegado")
+        const user: User = (await verifyJWT(
+            token,
+            Deno.env.get("JWT_SECRET")!
+        )) as User;
+        if (!user) throw new Error("Token incorrecto")
+        const post = await postCollection.updateOne({
+            _id: new ObjectId(postId),
+            author: new ObjectId(user.id)
+        }, {
+            $pull: { comments: new ObjectId(commentId) }
+        })
+        if (post.modifiedCount === 0) throw new Error("Error al elminar")
+        return "Comentario elimiado"
+    },
+    updatePost: async (_: unknown, args: { postId: string, title: string, content: string }, ctx: Context): Promise<string> => {
+        const token = ctx.token
+        const { postId, title, content } = args;
+        if (!token) throw new Error("Acceso denegado")
+        const user: User = (await verifyJWT(
+            token,
+            Deno.env.get("JWT_SECRET")!
+        )) as User;
+        if (!user) throw new Error("Token incorrecto")
+        const post = await postCollection.updateOne({
+            _id: new ObjectId(postId),
+            author: new ObjectId(user.id)
+        }, {
+            $set: { title: title, content: content }
+        })
+        if (post.modifiedCount === 0) throw new Error("Error al modificar post")
+        return "Modificado post"
+    },
+    updateComment: async (_: unknown, args: { commentId: string, content: string }, ctx: Context): Promise<string> => {
+        const token = ctx.token
+        const { commentId, content } = args;
+        if (!token) throw new Error("Acceso denegado")
+        const user: User = (await verifyJWT(
+            token,
+            Deno.env.get("JWT_SECRET")!
+        )) as User;
+        if (!user) throw new Error("Token incorrecto")
+        const comment = await commentCollection.updateOne({
+            _id: new ObjectId(commentId),
+            author: new ObjectId(user.id)
+        }, {
+            $set: { content: content }
+        })
+        if (comment.modifiedCount === 0) throw new Error("Error al modificar comentario")
+        return "Modificado comentario"
     }
+
 }

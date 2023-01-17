@@ -20,7 +20,6 @@ export const Post = {
     comments: async (parent: PostSchema): Promise<CommentSchema[]> => {
         try {
             const postComments = parent.comments;
-            console.log(postComments)
             const comments = await commentCollection.find({
                 _id: { $in: parent.comments }
             }).toArray()

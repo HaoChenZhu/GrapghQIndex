@@ -55,6 +55,10 @@ type Mutation{
       surname: String!
     ): User!
     post(title: String!,content: String!):Post!
+    deletePost(postId: String!): String!
+    deleteComment(postId: String!, commentId: String!): String!
+    updatePost(postId: String!,title:String, content:String):String!
     comment(postId: String!, comment: String!): Comment!
-}
+    updateComment(commentId: String!,content:String!):String!
+} 
 `

@@ -25,9 +25,9 @@ export const Query = {
         }
     },
     hello: () => "Hello World!",
-    getPost: async (parent: unknown, arg: unknown, ctx: Context): Promise<PostSchema[]> => {
+    getPost: async (parent: unknown, arg: unknown): Promise<PostSchema[]> => {
         try {
-            const token = ctx.token
+            /* const token = ctx.token
             console.log(token)
             if (!token) throw new Error("Acceso denegado")
             const user: User = (await verifyJWT(
@@ -35,15 +35,15 @@ export const Query = {
                 Deno.env.get("JWT_SECRET")!
             )) as User;
             if (!user) throw new Error("Token incorrecto")
-            console.log(user.id)
-            const post = await postCollection.find({
-                author: new ObjectId(user.id)
-            }).toArray()
-            if (!post) throw new Error("Error");
-
+            console.log(user.id) */
+            /*             const post = await postCollection.find({
+                            author: new ObjectId(user.id)
+                        }).toArray() */
+            const post = await postCollection.find().toArray();
+            //if (!post) throw new Error("Error");
             return post;
-        } catch (error) {
-
+        } catch (e) {
+            throw new Error(e);
         }
     }
 
