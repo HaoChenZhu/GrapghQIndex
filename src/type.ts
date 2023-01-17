@@ -6,7 +6,7 @@ export type User = {
     name: string;
     surname: string;
     token?: string;
-    posts?: [Post]
+    posts?: Post[]
 }
 
 
@@ -15,7 +15,7 @@ export type Post = {
     title: string;
     content: string;
     author: User;
-    comments: [Comment]
+    comments: Comment[]
 }
 
 export type Comment = {
