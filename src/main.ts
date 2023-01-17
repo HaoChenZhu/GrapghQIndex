@@ -4,9 +4,15 @@ import { makeExecutableSchema } from "graphql_tools";
 import { typeDefs } from "./schema.ts";
 import { Mutation } from "./resolvers/mutation.ts";
 import { Query } from "./resolvers/query.ts";
+import { Post } from "./resolvers/post.ts";
+import { User } from "./resolvers/user.ts";
+import { Comment } from "./resolvers/comment.ts";
 const resolvers = {
   Mutation,
-  Query
+  Query,
+  Post,
+  User,
+  Comment
 };
 const s = new Server({
   handler: async (req) => {

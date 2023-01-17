@@ -1,5 +1,20 @@
 import { gql } from "graphql_tag";
 
+/* 
+post:
+titulo:String
+descripcion:string
+author:author
+comentario:comentario[]
+
+comentario:
+author:author
+contenido:string
+
+user
+
+*/
+
 export const typeDefs = gql`
 
 type User {
@@ -9,10 +24,25 @@ type User {
     name: String!
     surname: String!
     token: String
-  }
+    posts: [Post!]
+}
+
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+  comments: [Comment!]
+}
+type Comment{
+  id: ID!
+  content: String!
+  author: User!
+}
 
 type Query {
     Me(token: String!): User!
+    getPost:[Post!]
     hello: String
   }
 type Mutation{
@@ -24,5 +54,7 @@ type Mutation{
       name: String!,
       surname: String!
     ): User!
+    post(title: String!,content: String!):Post!
+    comment(postId: String!, comment: String!): Comment!
 }
 `

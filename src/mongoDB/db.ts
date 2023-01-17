@@ -1,5 +1,5 @@
 import { Database, MongoClient } from "mongo";
-import { UserSchema } from "./schema.ts";
+import { CommentSchema, PostSchema, UserSchema } from "./schema.ts";
 import "dotenv";
 
 const connectMongoDB = async (): Promise<Database> => {
@@ -22,4 +22,5 @@ const connectMongoDB = async (): Promise<Database> => {
 const db = await connectMongoDB();
 console.info(`MomgoDb ${Deno.env.get("DB_NAME")} connected`);
 export const userCollection = db.collection<UserSchema>("user");
-
+export const postCollection = db.collection<PostSchema>("post");
+export const commentCollection = db.collection<CommentSchema>("comment")
